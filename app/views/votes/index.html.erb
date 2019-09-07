@@ -1,0 +1,8 @@
+<h1>Votes#index</h1>
+<%= form_tag "/votes", method: "post" do %>
+  <input type="text" name="vote" />
+  <input type="submit" value="Proposer un vote" />
+<% end %>
+<% @votes.each do |vote| %>
+  <p><%= vote.quest %> <%= vote.for %> <%= vote.against %></p>
+<% end %>
