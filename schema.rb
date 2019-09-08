@@ -12,12 +12,17 @@
 
 ActiveRecord::Schema.define(version: 2019_09_08_213140) do
 
+  create_table "logvote", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "vote"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "passwd"
   end
 
-  create_table "vote_logs", force: :cascade do |t|
+  create_table "votelog", force: :cascade do |t|
     t.integer "user_id"
     t.integer "vote_id"
     t.integer "vote"

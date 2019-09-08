@@ -10,6 +10,11 @@
   </head>
 
   <body>
+    <%= flash[:sucess] %>
+    <%= flash[:fail] %>
+    <% if @current_user %>
+      <h1> <%= @current_user.name %> </h1>
+    <% end %>
     <%= yield %>
   </body>
 </html>

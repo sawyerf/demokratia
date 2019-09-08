@@ -3,3 +3,6 @@
 <%= @vote.against %> no
 <%= button_to "+1", "/for/" + @vote.id.to_s, class: 'vote', method: :put, remote: true %>
 <%= button_to "-1", "/against/" + @vote.id.to_s, class: 'vote', method: :put, remote: true %>
+<% @votelogs.each do |votelog| %>
+<p> <%= votelog.vote %> </p>
+<% end %>

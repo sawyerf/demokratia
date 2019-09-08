@@ -1,0 +1,9 @@
+<%= form_tag "/register", method: :post do %>
+  <input type="text" name="name" />
+  <input type="password" name="passwd" />
+  <input type="password" name="repeat" />
+  <input type="submit" value="S'inscrire" />
+<% end %>
+<% @users.each do |user| %>
+  <p> <%= user.name %> </p>
+<% end %>
