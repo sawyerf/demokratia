@@ -1,9 +1,6 @@
 Rails.application.routes.draw do
   get 'votes/:id' => 'votes#show'
-  put 'for/:id' => 'votes#for'
-  put 'against/:id' => 'votes#against'
-  post 'for/:id' => 'votes#for'
-  post 'against/:id' => 'votes#against'
+  post 'votes/:id' => 'votes#vote'
   get '' => 'votes#index'
   post '' => 'votes#create'
   get 'register' => 'users#register'

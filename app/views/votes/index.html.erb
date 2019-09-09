@@ -4,5 +4,5 @@
   <input type="submit" value="Proposer un vote" />
 <% end %>
 <% @votes.each do |vote| %>
-  <p><a href="/votes/<%= vote.id %>"><%= vote.id %> <%= vote.quest %> <%= vote.for %> <%= vote.against %></a></p>
+  <p><a href="/votes/<%= vote.id %>"><%= vote.id %> <%= vote.quest %> <%= vote.vote[0] %> <%= vote.vote[1] %></a></p>
 <% end %>

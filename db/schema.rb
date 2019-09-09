@@ -25,8 +25,7 @@ ActiveRecord::Schema.define(version: 2019_09_08_213140) do
 
   create_table "votes", force: :cascade do |t|
     t.string "quest"
-    t.integer "for"
-    t.integer "against"
+    t.string "vote"
   end
 
 end
