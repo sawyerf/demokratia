@@ -12,9 +12,22 @@
   <body>
     <%= flash[:sucess] %>
     <%= flash[:fail] %>
-    <% if @current_user %>
-      <h1> <%= @current_user.name %> </h1>
-    <% end %>
+	<header>
+		<h1> Demokratia </h1>
+		<nav>
+			<ul>
+				<li> <a href="/">home</a> </li>
+				<li> <a href="/votes">votes</a> </li>
+			</ul>
+		</nav>
+		<% if @current_user %>
+			<p> <%= @current_user.name %>
+			<a href="/disconnect">disconnect</a>
+		<% else %>
+			<a href="/register">register</a>
+			<a href="/login">login</a>
+		<% end %>
+	</header>
     <%= yield %>
   </body>
 </html>

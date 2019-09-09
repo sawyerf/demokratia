@@ -7,6 +7,10 @@ class UsersController < ApplicationController
   def register
     @users = User.all
   end
+  def disconnect
+    session[:user_id] = nil;
+    redirect_to "/"
+  end
   def connect
     unless session[:user_id]
       @current_user = User.where(name: params[:name], passwd: params[:passwd]).first
