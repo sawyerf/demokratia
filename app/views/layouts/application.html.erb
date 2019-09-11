@@ -7,27 +7,31 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
 
   <body>
-    <%= flash[:sucess] %>
-    <%= flash[:fail] %>
-	<header>
-		<h1> Demokratia </h1>
-		<nav>
-			<ul>
-				<li> <a href="/">home</a> </li>
-				<li> <a href="/votes">votes</a> </li>
+	<nav class="border-bottom navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="/"> Demokratia </a>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item"> <a class="nav-link" href="/">Home</a> </li>
+				<li class="nav-item"> <a class="nav-link" href="/votes">Votes</a> </li>
 			</ul>
-		</nav>
-		<% if @current_user %>
-			<p> <%= @current_user.name %>
-			<a href="/disconnect">disconnect</a>
-		<% else %>
-			<a href="/register">register</a>
-			<a href="/login">login</a>
-		<% end %>
-	</header>
+		</div>
+			<div class="float-right">
+				<% if @current_user %>
+					<p> <%= @current_user.name %>
+					<a class="btn btn-outline-primary" href="/disconnect">disconnect</a>
+				<% else %>
+					<a href="/login">Sign in</a>
+					<a class="btn btn-outline-primary" href="/register">Sign up</a>
+				<% end %>
+			</div>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+	</nav>
+    <% if flash[:success] %> <div class="alert alert-success" role="alert"> <%= flash[:success] %> </div> <% end %>
+    <% if flash[:fail] %> <div class="alert alert-danger" role="alert"> <%= flash[:fail] %> </div> <% end %>
     <%= yield %>
   </body>
 </html>

@@ -3,8 +3,13 @@ class VotesController < ApplicationController
 	@votes = Vote.all
   end
   def create
-	Vote.create quest: params[:vote], vote: [0, 0]
-    redirect_to "/"
+    if @current_user
+	  Vote.create quest: params[:vote], vote: [0, 0], all: 0
+      redirect_to "/"
+    else
+      flash[:fail] = "Your not connect"
+      redirect_to "/"
+    end
   end
   def show
     @vote = Vote.find(params[:id])
@@ -19,12 +24,15 @@ class VotesController < ApplicationController
         return 
       elsif not @current_vote
         @vote.vote[@nvote] = @vote.vote[@nvote] + 1
+        @vote.all = @vote.all + 1
         VoteLog.create user_id: @current_user.id, vote_id: params[:id], vote: @nvote
       elsif @current_vote.vote == -1
         @vote.vote[@nvote] = @vote.vote[@nvote] + 1
+        @vote.all = @vote.all + 1
         @current_vote.update vote: @nvote
       elsif @current_vote.vote == @nvote
         @vote.vote[@nvote] = @vote.vote[@nvote] - 1
+        @vote.all = @vote.all - 1
         @current_vote.update vote: -1
       elsif @current_vote.vote != @nvote
         @vote.vote[@nvote] = @vote.vote[@nvote] + 1

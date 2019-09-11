@@ -13,8 +13,8 @@ class UsersController < ApplicationController
   end
   def connect
     unless session[:user_id]
-      @current_user = User.where(name: params[:name], passwd: params[:passwd]).first
-      if @current_user
+      @current_user = User.where(name: params[:name]).first
+      if @current_user and BCrypt::Password.new(@current_user.passwd) == params[:passwd]
         session[:user_id] = @current_user.id
         flash[:success] = "Welcome " + @current_user.name
         redirect_to "/"
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
       redirect_to "/register"
     else
       if params[:passwd] == params[:repeat]
-        User.create name: params[:name], passwd: params[:passwd]
+        User.create name: params[:name], passwd: BCrypt::Password.create(params[:passwd])
         flash[:success] = "Register success"
         redirect_to "/register"
       else

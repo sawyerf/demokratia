@@ -1,6 +1,14 @@
-<h1>Login</h1>
-<%= form_tag "/login", method: :post do %>
-  <input type="text" name="name" />
-  <input type="password" name="passwd" />
-  <input type="submit" value="Sign in" />
-<% end %>
+<div class="border rounded dm-form">
+	<h1 class="text-center" >Login</h1>
+	<%= form_tag "/login", method: :post do %>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Username</label>
+			<input class="form-control" type="text" name="name" placeholder="Username"/>
+		</div>
+		<div class="form-group">
+			<label for="exampleInputEmail1">Password</label>
+			<input class="form-control" type="password" name="passwd" placeholder="Password"/>
+		</div>
+		<button class="btn btn-primary w-100" type="submit"> Sign in </button>
+	<% end %>
+</div>

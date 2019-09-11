@@ -1,8 +1,10 @@
 <h1>Votes#index</h1>
 <%= form_tag "/", method: "post" do %>
-  <input type="text" name="vote" />
-  <input type="submit" value="Proposer un vote" />
+  <input type="text" name="vote"/>
+  <input type="submit" value="Proposer un vote"/>
 <% end %>
 <% @votes.each do |vote| %>
-  <p><a href="/votes/<%= vote.id %>"><%= vote.id %> <%= vote.quest %> <%= vote.vote[0] %> <%= vote.vote[1] %></a></p>
+	<a class="dm-vote" href="/votes/<%= vote.id %>">
+		<p> <%= vote.all %> votes | <%= vote.quest %> </p>
+	</a>
 <% end %>
