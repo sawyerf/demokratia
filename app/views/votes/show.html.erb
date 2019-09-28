@@ -1,7 +1,14 @@
 <h1><%= @vote.quest %></h1>
 <%= form_tag "/votes/" + @vote.id.to_s, method: :post do %>
-  <button name="vote" value=0><%= @vote.vote[0] %> yes</button>
-  <button name="vote" value=1><%= @vote.vote[1] %> no</button>
+  <% i = 0 %>
+  <% @choices.each do |choice| %>
+    <% if @current_votelog and @current_votelog.vote == i %>
+      <button class="btn btn-primary dm-btn-chc" name="vote" value=<%= i %>><%= choice.number %> <%= choice.text %></button>
+    <% else %>
+      <button class="btn btn-secondary dm-btn-chc" name="vote" value=<%= i %>><%= choice.number %> <%= choice.text %></button>
+    <% end %>
+    <% i = i + 1 %>
+  <% end %>
 <% end %>
 <% @votelogs.each do |votelog| %>
 <p> <%= User.find(votelog.user_id).name %> <%= votelog.vote %> </p>

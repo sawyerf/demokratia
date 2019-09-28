@@ -10,11 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_08_213140) do
+ActiveRecord::Schema.define(version: 2019_09_28_012006) do
+
+  create_table "choices", force: :cascade do |t|
+    t.integer "vote"
+    t.string "text"
+    t.integer "number"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "passwd"
+    t.string "string"
   end
 
   create_table "vote_logs", force: :cascade do |t|
@@ -26,7 +33,6 @@ ActiveRecord::Schema.define(version: 2019_09_08_213140) do
   create_table "votes", force: :cascade do |t|
     t.string "quest"
     t.text "description"
-    t.string "vote"
     t.integer "all"
   end
 
