@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 class UsersController < ApplicationController
   def login
     if @current_user
@@ -10,6 +12,16 @@ class UsersController < ApplicationController
   def disconnect
     session[:user_id] = nil;
     redirect_to "/"
+  end
+  def generate_voter_hash
+    while true
+      random = (0...100).map { (rand(255)).chr }.join
+      voter_hash = Digest::MD5.hexdigest(random)
+      vote = User.where(voter_hash: voter_hash).first
+      unless vote
+        return voter_hash
+      end
+    end
   end
   def connect
     unless session[:user_id]
@@ -28,20 +40,19 @@ class UsersController < ApplicationController
     end
   end
   def create
-    @reguser = User.where(name: params[:name]).first
-    print @register
-    if @reguser
+    reguser = User.where(name: params[:name]).first
+    if reguser
       flash[:fail] = "Name already exist"
-      redirect_to "/register"
+    elsif params[:passwd] == ""
+      flash[:fail] = "Password is empty"
     else
       if params[:passwd] == params[:repeat]
-        User.create name: params[:name], passwd: BCrypt::Password.create(params[:passwd])
+        User.create name: params[:name], passwd: BCrypt::Password.create(params[:passwd]), voter_hash: generate_voter_hash()
         flash[:success] = "Register success"
-        redirect_to "/register"
       else
         flash[:fail] = "Password not match"
-        redirect_to "/register"
       end
     end
+    redirect_to "/register"
   end
 end

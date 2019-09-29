@@ -5,6 +5,6 @@
 <% end %>
 <% @votes.each do |vote| %>
 	<a class="dm-vote" href="/votes/<%= vote.id %>">
-		<p> <%= vote.all %> votes | <%= vote.quest %> </p>
+		<p> <%= vote.voter_count %> votes | <%= vote.quest %> </p>
 	</a>
 <% end %>

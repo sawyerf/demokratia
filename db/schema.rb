@@ -12,16 +12,22 @@
 
 ActiveRecord::Schema.define(version: 2019_09_28_012006) do
 
+  create_table "applicationsettings", force: :cascade do |t|
+    t.integer "vote_timeline", default: 7
+    t.integer "vote_min_valid", default: 50
+  end
+
   create_table "choices", force: :cascade do |t|
-    t.integer "vote"
+    t.integer "vote_id"
     t.string "text"
-    t.integer "number"
+    t.integer "vote_count"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "passwd"
     t.string "string"
+    t.string "voter_hash"
   end
 
   create_table "vote_logs", force: :cascade do |t|
@@ -33,7 +39,8 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
   create_table "votes", force: :cascade do |t|
     t.string "quest"
     t.text "description"
-    t.integer "all"
+    t.datetime "published"
+    t.integer "voter_count"
   end
 
 end
