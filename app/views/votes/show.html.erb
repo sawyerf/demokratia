@@ -1,3 +1,14 @@
+<% if @vote.isend? %>
+  <div class="alert alert-primary" role="alert">
+    <% if @vote.status == 1 %>
+      This vote is finished. `<%= Choice.find(@vote.winner).text %>` have win.
+    <% elsif @vote.status == 2 %>
+      Not enought people have vote.
+    <% elsif @vote.status == 3 %>
+      More than one choices have win.
+    <% end %>
+  </div>
+<% end %>
 <h1><%= @vote.quest %></h1>
 <p> <%= @vote.published %> </p>
 <%= form_tag "/votes/" + @vote.id.to_s, method: :post do %>

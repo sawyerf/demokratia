@@ -30,8 +30,8 @@
 			</div>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
 	</nav>
-    <% if flash[:success] %> <div class="alert alert-success" role="alert"> <%= flash[:success] %> </div> <% end %>
-    <% if flash[:fail] %> <div class="alert alert-danger" role="alert"> <%= flash[:fail] %> </div> <% end %>
+    <% if flash[:success] %> <div class="alert alert-success dm-alert" role="alert"> <%= flash[:success] %> </div> <% end %>
+    <% if flash[:fail] %> <div class="alert alert-danger dm-alert" role="alert"> <%= flash[:fail] %> </div> <% end %>
     <%= yield %>
   </body>
 </html>

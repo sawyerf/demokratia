@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2019_09_28_012006) do
 
-  create_table "applicationsettings", force: :cascade do |t|
+  create_table "application_settings", force: :cascade do |t|
     t.integer "vote_timeline", default: 7
     t.integer "vote_min_valid", default: 50
   end
@@ -40,6 +40,8 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
     t.string "quest"
     t.text "description"
     t.datetime "published"
+    t.integer "status", default: 0
+    t.integer "winner", default: -1
     t.integer "voter_count"
   end
 

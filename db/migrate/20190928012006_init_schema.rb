@@ -9,6 +9,8 @@ class InitSchema < ActiveRecord::Migration[6.0]
       t.string :quest
       t.text :description
       t.datetime :published
+      t.integer :status, default: 0
+      t.integer :winner, default: -1
       t.integer :voter_count
     end
     create_table :vote_logs do |t|
@@ -21,7 +23,7 @@ class InitSchema < ActiveRecord::Migration[6.0]
       t.string :text
       t.integer :vote_count
     end
-    create_table :applicationsettings do |t|
+    create_table :application_settings do |t|
       t.integer :vote_timeline, default: 7
       t.integer :vote_min_valid, default: 50
     end

@@ -25,9 +25,11 @@ class VotesController < ApplicationController
     end
   end
   def vote
-    if @current_user
+    @vote = Vote.find(params[:id])
+    if @vote.isend?
+      flash[:fail] = "Vote is end"
+    elsif @current_user
       nvote = params[:vote].to_i
-      @vote = Vote.find(params[:id])
       @choice = Choice.where(vote_id: params[:id])
       @current_vote = VoteLog.where(user_id: @current_user.id, vote_id: params[:id]).first
       if @choice.size <= nvote || nvote < 0
