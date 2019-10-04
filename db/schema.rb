@@ -21,6 +21,13 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
     t.integer "vote_id"
     t.string "text"
     t.integer "vote_count"
+    t.integer "site_id"
+  end
+
+  create_table "sites", force: :cascade do |t|
+    t.string "domain"
+    t.string "mykey"
+    t.string "itskey"
   end
 
   create_table "users", force: :cascade do |t|
@@ -31,9 +38,10 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
   end
 
   create_table "vote_logs", force: :cascade do |t|
-    t.integer "user_id"
     t.integer "vote_id"
     t.integer "vote"
+    t.integer "site_id"
+    t.string "voter_hash"
   end
 
   create_table "votes", force: :cascade do |t|
@@ -43,6 +51,9 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
     t.integer "status", default: 0
     t.integer "winner", default: -1
     t.integer "voter_count"
+    t.integer "choice_count"
+    t.integer "site_id"
+    t.integer "real_id"
   end
 
 end

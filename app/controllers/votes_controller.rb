@@ -4,7 +4,14 @@ class VotesController < ApplicationController
   end
   def create
     if @current_user
-	  @vote = Vote.create quest: params[:vote], description: "yes ma men", published: Time.now, voter_count: 0
+	  @vote = Vote.new
+      @vote.update quest: params[:vote],
+        description: "yes ma men",
+        published: Time.now,
+        choice_count: 3,
+        site_id: 1,
+        real_id: @vote.id,
+        voter_count: 0
 	  Choice.create vote_id: @vote.id, text: "white", vote_count: 0
 	  Choice.create vote_id: @vote.id, text: "yes", vote_count: 0
 	  Choice.create vote_id: @vote.id, text: "no", vote_count: 0
@@ -19,7 +26,7 @@ class VotesController < ApplicationController
     @vote = Vote.find(params[:id])
     @votelogs = VoteLog.where(vote_id: params[:id])
     if @current_user
-      @current_votelog = VoteLog.where(vote_id: params[:id], user_id: @current_user.id).first
+      @current_votelog = VoteLog.where(vote_id: params[:id], voter_hash: @current_user.voter_hash).first
     else
       @current_votelog = nil
     end
@@ -31,13 +38,14 @@ class VotesController < ApplicationController
     elsif @current_user
       nvote = params[:vote].to_i
       @choice = Choice.where(vote_id: params[:id])
-      @current_vote = VoteLog.where(user_id: @current_user.id, vote_id: params[:id]).first
+
+      @current_vote = VoteLog.where(voter_hash: @current_user.voter_hash, vote_id: params[:id]).first
       if @choice.size <= nvote || nvote < 0
         return 
       elsif not @current_vote
         @choice[nvote].vote_count = @choice[nvote].vote_count + 1
         @vote.voter_count = @vote.voter_count + 1
-        VoteLog.create user_id: @current_user.id, vote_id: params[:id], vote: nvote
+        VoteLog.create voter_hash: @current_user.voter_hash, vote_id: params[:id], vote: nvote
       elsif @current_vote.vote == -1
         @choice[nvote].vote_count = @choice[nvote].vote_count + 1
         @vote.voter_count = @vote.voter_count + 1

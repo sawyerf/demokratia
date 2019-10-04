@@ -12,16 +12,29 @@ class InitSchema < ActiveRecord::Migration[6.0]
       t.integer :status, default: 0
       t.integer :winner, default: -1
       t.integer :voter_count
+      t.integer :choice_count
+      # Instance
+      t.integer :site_id, default: 1
+      t.integer :real_id
     end
     create_table :vote_logs do |t|
-      t.integer :user_id
       t.integer :vote_id
       t.integer :vote
+      # Instance
+      t.integer :site_id
+      t.string :voter_hash
     end
     create_table :choices do |t|
       t.integer :vote_id
       t.string :text
       t.integer :vote_count
+      # Instance
+      t.integer :site_id
+    end
+    create_table :sites do |t|
+      t.string :domain
+      t.string :mykey
+      t.string :itskey
     end
     create_table :application_settings do |t|
       t.integer :vote_timeline, default: 7

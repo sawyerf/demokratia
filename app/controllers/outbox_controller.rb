@@ -1,0 +1,2 @@
+class OutboxController < ApplicationController
+end
