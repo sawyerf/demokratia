@@ -12,6 +12,35 @@ class Vote < ActiveRecord::Base
       :voter_count => self.voter_count,
       }.to_json
   end
+
+  def vote(nvote, voter_hash)
+    votelog = VoteLog.where(vote_id: self.id, voter_hash: voter_hash).first
+    choices = Choice.where(vote_id: self.id, site_id: 1)
+    if votelog
+      if nvote == -1
+        choices[votelog.vote].update vote_count: choices[votelog.vote].vote_count - 1
+        self.update voter_count: self.voter_count - 1
+      else
+        choices[nvote].update vote_count: choices[nvote].vote_count + 1
+        if votelog.vote == -1
+          self.update voter_count: self.voter_count + 1
+        else
+          choices[votelog.vote].update vote_count: choices[votelog.vote].vote_count - 1
+        end
+      end
+      votelog.update vote: nvote
+    else
+      votelog = VoteLog.create voter_hash: voter_hash,
+         site_id: 1,
+         vote_id: self.id,
+         vote: nvote
+      if nvote != -1
+        self.update voter_count: self.voter_count + 1
+        choices[nvote].update vote_count: choices[nvote].vote_count + 1
+      end
+    end
+  end
+
   def isend?
     if self.status > 0
       return TRUE
@@ -32,6 +61,7 @@ class Vote < ActiveRecord::Base
     end
     return FALSE
   end
+
   def winner?
     chc = Choice.where(vote_id: self.id).order('vote_count DESC')
     if chc[0].vote_count == chc[1].vote_count

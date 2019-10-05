@@ -12,15 +12,16 @@ class VotesController < ApplicationController
         site_id: 1,
         real_id: @vote.id,
         voter_count: 0
-	  Choice.create vote_id: @vote.id, text: "white", vote_count: 0
-	  Choice.create vote_id: @vote.id, text: "yes", vote_count: 0
-	  Choice.create vote_id: @vote.id, text: "no", vote_count: 0
+	  Choice.create vote_id: @vote.id, text: "white", vote_count: 0, site_id: 1
+	  Choice.create vote_id: @vote.id, text: "yes", vote_count: 0, site_id: 1
+	  Choice.create vote_id: @vote.id, text: "no", vote_count: 0, site_id: 1
       redirect_to "/"
     else
       flash[:fail] = "Your not connect"
       redirect_to "/"
     end
   end
+
   def show
     @choices = Choice.where(vote_id: params[:id])
     @vote = Vote.find(params[:id])
@@ -34,31 +35,13 @@ class VotesController < ApplicationController
 
   def votelocal(vote)
     nvote = params[:vote].to_i
-    choice = Choice.where(vote_id: params[:id])
     votelog = VoteLog.where(voter_hash: @current_user.voter_hash, vote_id: params[:id]).first
-    if choice.size <= nvote || nvote < 0
+    if vote.choice_count <= nvote or nvote < 0
       return 
-    elsif not votelog
-      choice[nvote].vote_count = choice[nvote].vote_count + 1
-      vote.voter_count = vote.voter_count + 1
-      VoteLog.create voter_hash: @current_user.voter_hash, vote_id: params[:id], vote: nvote
-    elsif votelog.vote == -1
-      choice[nvote].vote_count = choice[nvote].vote_count + 1
-      vote.voter_count = vote.voter_count + 1
-      votelog.update vote: nvote
-    elsif votelog.vote == nvote
-      choice[nvote].vote_count = choice[nvote].vote_count - 1
-      vote.voter_count = vote.voter_count - 1
-      votelog.update vote: -1
-    elsif votelog.vote != nvote
-      choice[nvote].vote_count = choice[nvote].vote_count + 1
-      choice[votelog.vote].vote_count = choice[votelog.vote].vote_count - 1
-      votelog.update vote: nvote
+    elsif votelog and votelog.vote == nvote
+      nvote = -1
     end
-    vote.save
-    choice.each do |chc|
-      chc.save
-    end
+    vote.vote(nvote, @current_user.voter_hash)
   end
 
   def voteglobal(vote)
