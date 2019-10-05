@@ -31,40 +31,56 @@ class VotesController < ApplicationController
       @current_votelog = nil
     end
   end
-  def vote
-    @vote = Vote.find(params[:id])
-    if @vote.isend?
-      flash[:fail] = "Vote is end"
-    elsif @current_user
-      nvote = params[:vote].to_i
-      @choice = Choice.where(vote_id: params[:id])
 
-      @current_vote = VoteLog.where(voter_hash: @current_user.voter_hash, vote_id: params[:id]).first
-      if @choice.size <= nvote || nvote < 0
-        return 
-      elsif not @current_vote
-        @choice[nvote].vote_count = @choice[nvote].vote_count + 1
-        @vote.voter_count = @vote.voter_count + 1
-        VoteLog.create voter_hash: @current_user.voter_hash, vote_id: params[:id], vote: nvote
-      elsif @current_vote.vote == -1
-        @choice[nvote].vote_count = @choice[nvote].vote_count + 1
-        @vote.voter_count = @vote.voter_count + 1
-        @current_vote.update vote: nvote
-      elsif @current_vote.vote == nvote
-        @choice[nvote].vote_count = @choice[nvote].vote_count - 1
-        @vote.voter_count = @vote.voter_count - 1
-        @current_vote.update vote: -1
-      elsif @current_vote.vote != nvote
-        @choice[nvote].vote_count = @choice[nvote].vote_count + 1
-        @choice[@current_vote.vote].vote_count = @choice[@current_vote.vote].vote_count - 1
-        @current_vote.update vote: nvote
-      end
-      @vote.save
-      @choice.each do |chc|
-        chc.save
-      end
-    else
+  def votelocal(vote)
+    nvote = params[:vote].to_i
+    choice = Choice.where(vote_id: params[:id])
+    votelog = VoteLog.where(voter_hash: @current_user.voter_hash, vote_id: params[:id]).first
+    if choice.size <= nvote || nvote < 0
+      return 
+    elsif not votelog
+      choice[nvote].vote_count = choice[nvote].vote_count + 1
+      vote.voter_count = vote.voter_count + 1
+      VoteLog.create voter_hash: @current_user.voter_hash, vote_id: params[:id], vote: nvote
+    elsif votelog.vote == -1
+      choice[nvote].vote_count = choice[nvote].vote_count + 1
+      vote.voter_count = vote.voter_count + 1
+      votelog.update vote: nvote
+    elsif votelog.vote == nvote
+      choice[nvote].vote_count = choice[nvote].vote_count - 1
+      vote.voter_count = vote.voter_count - 1
+      votelog.update vote: -1
+    elsif votelog.vote != nvote
+      choice[nvote].vote_count = choice[nvote].vote_count + 1
+      choice[votelog.vote].vote_count = choice[votelog.vote].vote_count - 1
+      votelog.update vote: nvote
+    end
+    vote.save
+    choice.each do |chc|
+      chc.save
+    end
+  end
+
+  def voteglobal(vote)
+    nvote = params[:vote].to_i
+    votelog = VoteLog.where(voter_hash: @current_user.voter_hash, vote_id: params[:id]).first
+    if vote.choice_count <= nvote or nvote < 0
+      return 
+    elsif votelog and votelog.vote == nvote
+      nvote = -1
+    end
+  end
+
+  def vote
+    vote = Vote.find(params[:id])
+    if not @current_user
       flash[:fail] = "Your not connect"
+    elsif vote.site_id != 1
+      nil
+    elsif vote.isend?
+      flash[:fail] = "Vote is end"
+    elsif vote.site_id == 1
+      self.votelocal(vote)
     end
     redirect_to "/votes/#{params[:id]}"
   end

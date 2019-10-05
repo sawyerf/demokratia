@@ -1,6 +1,7 @@
 class Vote < ActiveRecord::Base
   def json
     return {
+      :type => "vote",
       :id => self.real_id,
       :quest => self.quest,
       :description => self.description,

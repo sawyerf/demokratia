@@ -15,6 +15,6 @@ Rails.application.routes.draw do
 
   get 'disconnect', to: 'users#disconnect'
 
-  post 'inbox', to: 'inbox#Recv', default: { format: 'json' }
+  post 'inbox', to: 'inbox#recv', default: { format: 'json' }
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
