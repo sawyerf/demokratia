@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Demokratia</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+	<head>
+		<title>Demokratia</title>
+		<%= csrf_meta_tags %>
+		<%= csp_meta_tag %>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+		<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+		<%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+	</head>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  </head>
-
-  <body>
-	<nav class="border-bottom navbar navbar-expand-lg navbar-light bg-light">
-		<a class="navbar-brand" href="/"> Demokratia </a>
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"> <a class="nav-link" href="/">Home</a> </li>
-				<li class="nav-item"> <a class="nav-link" href="/votes">Votes</a> </li>
-			</ul>
-		</div>
-			<div class="float-right">
-				<% if @current_user %>
-					<p> <%= @current_user.name %>
-					<a class="btn btn-outline-primary" href="/disconnect">disconnect</a>
-				<% else %>
-					<a href="/login">Sign in</a>
-					<a class="btn btn-outline-primary" href="/register">Sign up</a>
-				<% end %>
+	<body>
+<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<a class="navbar-item" href="/">
+		<strong> Demokratia </strong>
+		</a>
+		<% if not @current_user %>
+			<div class="navbar-item mobile-buttons">
+				<a class="button is-outlined " href="/login"> Sign in </a>
 			</div>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-	</nav>
-    <% if flash[:success] %> <div class="alert alert-success dm-alert" role="alert"> <%= flash[:success] %> </div> <% end %>
-    <% if flash[:fail] %> <div class="alert alert-danger dm-alert" role="alert"> <%= flash[:fail] %> </div> <% end %>
-    <%= yield %>
-  </body>
+		<% end %>
+		<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+			<span aria-hidden="true"></span>
+		</a>
+	</div>
+	<div id="navbarBasicExample" class="navbar-menu">
+		<div class="navbar-start">
+			<a class="navbar-item" href="/"> Home </a>
+			<a class="navbar-item" href="/votes"> Vote </a>
+		</div>
+		<div class="navbar-end">
+			<div class="navbar-item">
+		<% if @current_user %>
+			<p> <%= @current_user.name %> <p>
+			<div class="buttons">
+				<a class="button is-primary" href="/disconnect"> disconnect </a>
+			</div>
+		<% else %>
+			<div class="buttons">
+				<a class="button is-light" href="/login"> Sign in </a>
+				<a class="button is-primary" href="/register"> <strong>Sign up</strong> </a>
+			</div>
+		<% end %>
+			</div>
+		</div>
+	</div>
+</nav>
+		<% if flash[:success] %> <div class="notification is-success dm-alert"> <%= flash[:success] %> </div> <% end %>
+		<% if flash[:fail] %> <div class="notification is-danger dm-alert"> <%= flash[:fail] %> </div> <% end %>
+		<%= yield %>
+	</body>
 </html>

@@ -1,10 +1,29 @@
 <h1>Votes#index</h1>
 <%= form_tag "/", method: "post" do %>
-  <input type="text" name="vote"/>
-  <input type="submit" value="Proposer un vote"/>
+	<input type="text" name="vote"/>
+	<input type="submit" value="Proposer un vote"/>
 <% end %>
-<% @votes.each do |vote| %>
-	<a class="dm-vote" href="/votes/<%= vote.id %>">
-		<p> <%= vote.voter_count %> votes | <%= vote.quest %> </p>
-	</a>
-<% end %>
+<div class="content">
+	<table>
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Voter</th>
+				<th>Site</th>
+				<th>Quest</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @votes.each do |vote| %>
+				<tr>
+					<th><%= vote.id %> </th>
+					<td><%= vote.voter_count %> </td>
+					<td><%= Site.find(vote.site_id).domain %></td>
+					<td><a href="/votes/<%= vote.id %>"> <%= vote.quest %> </a></td>
+					<td><%= vote.status %> </td>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>

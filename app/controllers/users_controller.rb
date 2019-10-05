@@ -43,6 +43,8 @@ class UsersController < ApplicationController
     reguser = User.where(name: params[:name]).first
     if reguser
       flash[:fail] = "Name already exist"
+    elsif params[:name] == ""
+      flash[:fail] = "Username is empty"
     elsif params[:passwd] == ""
       flash[:fail] = "Password is empty"
     else
