@@ -1,4 +1,16 @@
 class Vote < ActiveRecord::Base
+  def json
+    return {
+      :id => self.real_id,
+      :quest => self.quest,
+      :description => self.description,
+      :published => self.published,
+      :status => self.voter_count,
+      :winner => self.winner,
+      :site => Site.find(self.site_id).domain,
+      :voter_count => self.voter_count,
+      }.to_json
+  end
   def isend?
     if self.status > 0
       return TRUE

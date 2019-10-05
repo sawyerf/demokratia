@@ -10,7 +10,7 @@ class InitSchema < ActiveRecord::Migration[6.0]
       t.text :description
       t.datetime :published
       t.integer :status, default: 0
-      t.integer :winner, default: -1
+      t.string :winner, default: nil
       t.integer :voter_count
       t.integer :choice_count
       # Instance
