@@ -2,13 +2,17 @@ class InboxController < ApplicationController
  skip_before_action :verify_authenticity_token
 
   def vote(item)
-    votelog = VoteLog.where(vote_id: item[:vote_id], site_id: 1, voter_hash: item[:voter_hash]).first
+    votelog = VoteLog.where(vote_id: item[:vote_id], voter_hash: item[:voter_hash]).first
     vote = Vote.find(item[:vote_id])
-    if vote.choice_count <= item[:vote] or item[:vote] < -1 or item[:vote] == votelog.vote
+    if vote.choice_count <= item[:vote] or item[:vote] < -1 
       head 406
       return nil
+    elsif votelog and item[:vote] == votelog.vote
+      return vote.json_reinbox(votelog)
     end
     vote.vote(item[:vote], item[:voter_hash])
+    votelog = VoteLog.where(vote_id: item[:vote_id], voter_hash: item[:voter_hash]).first
+    return vote.json_reinbox(votelog)
   end
 
   def createvote(item)
@@ -37,6 +41,8 @@ class InboxController < ApplicationController
         @body = self.vote(item)
       elsif item[:type] == "createvote"
         @body = self.createvote(item)
+      else
+        head 400
       end
     else
       head 401

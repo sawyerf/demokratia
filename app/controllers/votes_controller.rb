@@ -1,3 +1,5 @@
+require 'json'
+
 class VotesController < ApplicationController
   def index
 	@votes = Vote.all
@@ -52,6 +54,30 @@ class VotesController < ApplicationController
     elsif votelog and votelog.vote == nvote
       nvote = -1
     end
+    vote.vote(nvote, @current_user.voter_hash)
+    votelog = VoteLog.where(voter_hash: @current_user.voter_hash, vote_id: params[:id]).first
+    site_key = Site.find(vote.site_id).mykey
+    json = votelog.json_inbox(nvote, site_key)
+    http = Net::HTTP.new("localhost", 3001)
+    http.use_ssl = false
+    request = Net::HTTP::Post.new("/inbox", {'Content-Type' => 'application/json'})
+    request.body = json
+    response = http.request(request)
+    items = JSON.parse(response.body)
+    flash[:success] = items["items"]
+    items["items"].each do |item|
+      if item["type"] == "vote"
+        choices = Choice.where(vote_id: vote.id)
+        vote.update voter_count: item["voter_count"], status: item["status"], winner: item["winner"]
+        i = 0
+        item["choices"].each do |vote_count|
+          choices[i].update vote_count: vote_count
+          i = i + 1
+        end
+      elsif item["type"] == "votelog"
+        votelog.update vote: item["vote"]
+      end
+    end
   end
 
   def vote
@@ -63,7 +89,7 @@ class VotesController < ApplicationController
     elsif vote.isend?
       flash[:fail] = "Vote is end"
     elsif vote.site_id == 1
-      self.votelocal(vote)
+      self.voteglobal(vote)
     end
     redirect_to "/votes/#{params[:id]}"
   end

@@ -13,6 +13,30 @@ class Vote < ActiveRecord::Base
       }.to_json
   end
 
+  def json_reinbox(votelog)
+    lchc = Array.new()
+    choices = Choice.where(vote_id: self.id)
+    choices.each do |chc|
+      lchc = lchc.push(chc.vote_count)
+    end
+    return {
+      :items => [
+        {
+          :type => "vote",
+          :id => self.real_id,
+          :status => self.status,
+          :winner => self.winner,
+          :voter_count => self.voter_count,
+          :choices => lchc
+        },
+        {
+          :type => "votelog",
+          :vote => votelog.vote
+        }
+      ]
+    }.to_json
+  end
+
   def vote(nvote, voter_hash)
     votelog = VoteLog.where(vote_id: self.id, voter_hash: voter_hash).first
     choices = Choice.where(vote_id: self.id, site_id: 1)
