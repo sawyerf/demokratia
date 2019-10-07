@@ -16,6 +16,7 @@ class InitSchema < ActiveRecord::Migration[6.0]
       # Instance
       t.integer :site_id, default: 1
       t.integer :real_id
+      t.datetime :updated
     end
     create_table :vote_logs do |t|
       t.integer :vote_id
@@ -23,13 +24,16 @@ class InitSchema < ActiveRecord::Migration[6.0]
       # Instance
       t.integer :site_id
       t.string :voter_hash
+      t.datetime :updated
     end
     create_table :choices do |t|
       t.integer :vote_id
       t.string :text
       t.integer :vote_count
+      t.integer :index
       # Instance
       t.integer :site_id
+      t.datetime :updated
     end
     create_table :sites do |t|
       t.string :domain

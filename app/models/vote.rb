@@ -1,16 +1,35 @@
 class Vote < ActiveRecord::Base
-  def json
+  include Updated
+
+  def outbox_json
     return {
       :type => "vote",
-      :id => self.real_id,
+      :id => self.id,
       :quest => self.quest,
       :description => self.description,
       :published => self.published,
       :status => self.voter_count,
       :winner => self.winner,
-      :site => Site.find(self.site_id).domain,
       :voter_count => self.voter_count,
-      }.to_json
+    }
+  end
+
+  def json
+    return {
+      :items => [
+        {
+          :type => "vote",
+          :id => self.real_id,
+          :quest => self.quest,
+          :description => self.description,
+          :published => self.published,
+          :status => self.voter_count,
+          :winner => self.winner,
+          :site => Site.find(self.site_id).domain,
+          :voter_count => self.voter_count,
+        }
+      ]
+    }.to_json
   end
 
   def json_reinbox(votelog)
@@ -19,7 +38,7 @@ class Vote < ActiveRecord::Base
     choices.each do |chc|
       lchc = lchc.push(chc.vote_count)
     end
-    return {
+    json = {
       :items => [
         {
           :type => "vote",
@@ -28,13 +47,16 @@ class Vote < ActiveRecord::Base
           :winner => self.winner,
           :voter_count => self.voter_count,
           :choices => lchc
-        },
-        {
-          :type => "votelog",
-          :vote => votelog.vote
         }
       ]
-    }.to_json
+    }
+    if votelog
+        json[:items].push({
+          :type => "votelog",
+          :vote => votelog.vote
+        })
+    end
+    return json.to_json
   end
 
   def vote(nvote, voter_hash)

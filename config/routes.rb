@@ -12,8 +12,9 @@ Rails.application.routes.draw do
 
   get 'login', to: 'users#login'
   post 'login', to: 'users#connect'
-
   get 'disconnect', to: 'users#disconnect'
+
+  get 'outbox', to: 'outbox#outbox'
 
   post 'inbox', to: 'inbox#recv', default: { format: 'json' }
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

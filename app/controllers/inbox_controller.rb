@@ -2,8 +2,11 @@ class InboxController < ApplicationController
  skip_before_action :verify_authenticity_token
 
   def vote(item)
-    votelog = VoteLog.where(vote_id: item[:vote_id], voter_hash: item[:voter_hash]).first
     vote = Vote.find(item[:vote_id])
+    votelog = VoteLog.where(vote_id: item[:vote_id], voter_hash: item[:voter_hash]).first
+    if vote.isend?
+      return vote.json_reinbox(votelog)
+    end
     if vote.choice_count <= item[:vote] or item[:vote] < -1 
       head 406
       return nil
@@ -34,7 +37,8 @@ class InboxController < ApplicationController
   end
 
   def recv
-    site = Site.where(itskeys: params[:site_key])
+    site_key = request.headers["Authorization"]
+    site = Site.where(itskeys: site_key)
     if site
       item = params[:item]
       if item[:type] == "vote"

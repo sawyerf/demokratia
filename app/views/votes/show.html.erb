@@ -1,5 +1,5 @@
 <% if @vote.isend? %>
-	<div class="alert alert-primary" role="alert">
+	<div class="notification is-info">
 		<% if @vote.status == 1 %>
 			This vote is finished. `<%= Choice.find(@vote.winner).text %>` have win.
 		<% elsif @vote.status == 2 %>
@@ -16,9 +16,9 @@
 		<% i = 0 %>
 		<% @choices.each do |choice| %>
 		<% if @current_votelog and @current_votelog.vote == i %>
-			<button class="button is-primary is-medium" name="vote" value=<%= i %>><%= choice.vote_count %> <%= choice.text %></button>
+			<button class="button is-primary is-medium" name="vote" value=<%= i %> <% if @vote.isend? %>disabled<% end %>><%= choice.vote_count %> <%= choice.text %></button>
 		<% else %>
-			<button class="button is-medium" name="vote" value=<%= i %>><%= choice.vote_count %> <%= choice.text %></button>
+			<button class="button is-medium"  name="vote" value=<%= i %> <% if @vote.isend? %>disabled<% end %>><%= choice.vote_count %> <%= choice.text %></button>
 		<% end %>
 		<% i = i + 1 %>
 		<% end %>
@@ -28,6 +28,7 @@
 	<thead>
 		<tr>
 			<th>Voter Hash</th>
+			<th>Updated</th>
 			<th>Vote</th>
 		</tr>
 	</thead>
@@ -35,6 +36,7 @@
 	<% @votelogs.each do |votelog| %>
 		<tr>
 			<td><%= votelog.voter_hash %></td>
+			<td><%= votelog.updated %></td>
 			<th>
 				<% if votelog.vote != -1 %>
 					<%= @choices[votelog.vote].text %>

@@ -104,7 +104,7 @@ class VotesController < ApplicationController
     elsif vote.isend?
       flash[:fail] = "Vote is end"
     elsif vote.site_id == 1
-      self.voteglobal(vote)
+      self.votelocal(vote)
     end
     redirect_to "/votes/#{params[:id]}"
   end

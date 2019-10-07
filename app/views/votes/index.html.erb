@@ -11,6 +11,7 @@
 				<th>Voter</th>
 				<th>Site</th>
 				<th>Quest</th>
+				<th>Updated</th>
 				<th>Status</th>
 			</tr>
 		</thead>
@@ -21,7 +22,8 @@
 					<td><%= vote.voter_count %> </td>
 					<td><%= Site.find(vote.site_id).domain %></td>
 					<td><a href="/votes/<%= vote.id %>"> <%= vote.quest %> </a></td>
-					<td><%= vote.status %> </td>
+					<td> <%= convert_time(vote.updated) %> </td>
+					<td> <% if vote.isend? %> End <% else %> In progress <% end %> </tr>
 				</tr>
 			<% end %>
 		</tbody>

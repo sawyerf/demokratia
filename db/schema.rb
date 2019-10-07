@@ -21,7 +21,9 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
     t.integer "vote_id"
     t.string "text"
     t.integer "vote_count"
+    t.integer "index"
     t.integer "site_id"
+    t.datetime "updated"
   end
 
   create_table "sites", force: :cascade do |t|
@@ -42,6 +44,7 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
     t.integer "vote"
     t.integer "site_id"
     t.string "voter_hash"
+    t.datetime "updated"
   end
 
   create_table "votes", force: :cascade do |t|
@@ -49,11 +52,12 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
     t.text "description"
     t.datetime "published"
     t.integer "status", default: 0
-    t.integer "winner", default: -1
+    t.string "winner"
     t.integer "voter_count"
     t.integer "choice_count"
-    t.integer "site_id"
+    t.integer "site_id", default: 1
     t.integer "real_id"
+    t.datetime "updated"
   end
 
 end
