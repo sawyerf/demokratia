@@ -2,7 +2,7 @@ class InitSchema < ActiveRecord::Migration[6.0]
   def change
     create_table :users do |t|
       t.string :name
-      t.string :passwd, :string
+      t.string :passwd
       t.string :voter_hash
     end
     create_table :votes do |t|

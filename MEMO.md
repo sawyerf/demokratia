@@ -1,15 +1,59 @@
-# This file is auto-generated from the current state of the database. Instead
-# of editing this file, please use the migrations feature of Active Record to
-# incrementally modify your database, and then regenerate this schema definition.
-#
-# This file is the source Rails uses to define your schema when running `rails
-# db:schema:load`. When creating a new database, `rails db:schema:load` tends to
-# be faster and is potentially less error prone than running all of your
-# migrations from scratch. Old migrations may fail to apply correctly if those
-# migrations use external dependencies or application code.
-#
-# It's strongly recommended that you check this file into your version control system.
+# MEMO
 
+## INBOX
+## json
+```
+{
+	"site_key": "0800fc577294c34e0b28ad2839435945",
+	"item":	{
+			"type": "vote",
+			"voter_hash": "0800fc577294c34e0b28ad2839435945",
+			"vote_id": 5,
+			"vote": 1
+		}
+	"item": {
+			"type": "createvote",
+			"voter_hash": "0800fc577294c34e0b28ad2839435945",
+			"quest": "Ca va ?",
+			"description": "Une description.",
+			"choices": [
+				"Blanc",
+				"oui",
+				"non"
+			]
+		}
+}
+```
+
+## OUTBOX
+## json
+```
+{
+	"items": [
+		{
+			"type": "vote",
+			"id": 2,
+			"quest": "ca va ?",
+			"description": "yes ma men",
+			"published": "2019-10-31T19:23:00.844Z",
+			"status": 0,
+			"voter_count": 1,
+			"choice_count": 3
+			"status": -1/0/1/2/3,
+			"winner": -1/0/1/2/3,
+		},
+		{
+			"type": "choice",
+			"vote_id": 1,
+			"index": 1,
+			"text": "white",
+			"vote_count": 0
+		}
+}
+```
+
+## Database
+```
 ActiveRecord::Schema.define(version: 2019_09_28_012006) do
 
   create_table "application_settings", force: :cascade do |t|
@@ -22,7 +66,7 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
     t.string "text"
     t.integer "vote_count"
     t.integer "index"
-    t.integer "site_id"
+    t.integer "site_id" # id du vote
     t.datetime "updated"
   end
 
@@ -35,13 +79,13 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "passwd"
-    t.string "voter_hash"
+    t.string "voter_hash" # hash avec le quelle on vote
   end
 
   create_table "vote_logs", force: :cascade do |t|
     t.integer "vote_id"
     t.integer "vote"
-    t.integer "site_id"
+    t.integer "site_id" # id du voteur
     t.string "voter_hash"
     t.datetime "updated"
   end
@@ -60,3 +104,4 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
   end
 
 end
+```

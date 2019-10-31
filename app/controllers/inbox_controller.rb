@@ -2,10 +2,12 @@ class InboxController < ApplicationController
  skip_before_action :verify_authenticity_token
 
   def vote(item, site_id)
+    puts("vache: ", site_id)
     vote = Vote.find(item[:vote_id])
     if vote.choice_count <= item[:vote] or item[:vote] < -1 
       head 406
       return nil
+    end
     if not vote.isend?
       vote.vote(item[:vote], item[:voter_hash], site_id)
     end
@@ -23,9 +25,11 @@ class InboxController < ApplicationController
       site_id: 1,
       real_id: vote.id,
       voter_count: 0
-    Choice.create vote_id: vote.id, text: "white", vote_count: 0, site_id: 1
+    Choice.create vote_id: vote.id, text: "white", vote_count: 0, site_id: 1, index: i
+    i = 2
     item[:choices].each do |choice|
-      Choice.create vote_id: vote.id, text: choice, vote_count: 0, site_id: 1
+      Choice.create vote_id: vote.id, text: choice, vote_count: 0, site_id: 1, index: i
+      i = i + 1
     end
     # head 201
     return vote.json
