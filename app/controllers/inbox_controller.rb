@@ -3,18 +3,13 @@ class InboxController < ApplicationController
 
   def vote(item, site_id)
     vote = Vote.find(item[:vote_id])
-    votelog = VoteLog.where(vote_id: item[:vote_id], voter_hash: item[:voter_hash]).first
-    if vote.isend?
-      return vote.json_reinbox(votelog)
-    end
     if vote.choice_count <= item[:vote] or item[:vote] < -1 
       head 406
       return nil
-    elsif votelog and item[:vote] == votelog.vote
-      return vote.json_reinbox(votelog)
+    if not vote.isend?
+      vote.vote(item[:vote], item[:voter_hash], site_id)
     end
-    vote.vote(item[:vote], item[:voter_hash], site_id)
-    votelog = VoteLog.where(vote_id: item[:vote_id], voter_hash: item[:voter_hash]).first
+    votelog = VoteLog.where(vote_id: item[:vote_id], voter_hash: item[:voter_hash], site_id: site_id).first
     return vote.json_reinbox(votelog)
   end
 

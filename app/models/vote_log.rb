@@ -10,10 +10,10 @@ class VoteLog < ActiveRecord::Base
     }.to_json
   end
 
-  def json_inbox(nvote, site_key)
+  def json_inbox(nvote)
     vote = Vote.find(self.vote_id)
     return {
-      :site_key => site_key,
+      #:site_key => site_key,
       :item => {
         :type => "vote",
         :vote_id => vote.real_id,

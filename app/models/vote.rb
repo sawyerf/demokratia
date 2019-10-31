@@ -8,9 +8,10 @@ class Vote < ActiveRecord::Base
       :quest => self.quest,
       :description => self.description,
       :published => self.published,
-      :status => self.voter_count,
+      :status => self.status,
       :winner => self.winner,
       :voter_count => self.voter_count,
+      :choice_count => self.choice_count
     }
   end
 
@@ -63,7 +64,9 @@ class Vote < ActiveRecord::Base
     votelog = VoteLog.where(vote_id: self.id, voter_hash: voter_hash, site_id: site_id).first
     choices = Choice.where(vote_id: self.id)
     if votelog
-      if nvote == -1
+      if nvote == votelog.vote
+        return 
+      elsif nvote == -1
         choices[votelog.vote].update vote_count: choices[votelog.vote].vote_count - 1
         self.update voter_count: self.voter_count - 1
       else
@@ -90,6 +93,9 @@ class Vote < ActiveRecord::Base
   def isend?
     if self.status > 0
       return TRUE
+    end
+    if self.site_id != 1
+      return FALSE
     end
     settings = ApplicationSetting.all.first
     if settings.vote_timeline.to_i * 86400 + self.published.to_i <= Time.now.to_i
