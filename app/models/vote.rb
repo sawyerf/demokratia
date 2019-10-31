@@ -59,9 +59,9 @@ class Vote < ActiveRecord::Base
     return json.to_json
   end
 
-  def vote(nvote, voter_hash)
-    votelog = VoteLog.where(vote_id: self.id, voter_hash: voter_hash).first
-    choices = Choice.where(vote_id: self.id, site_id: 1)
+  def vote(nvote, voter_hash, site_id)
+    votelog = VoteLog.where(vote_id: self.id, voter_hash: voter_hash, site_id: site_id).first
+    choices = Choice.where(vote_id: self.id)
     if votelog
       if nvote == -1
         choices[votelog.vote].update vote_count: choices[votelog.vote].vote_count - 1
@@ -77,7 +77,7 @@ class Vote < ActiveRecord::Base
       votelog.update vote: nvote
     else
       votelog = VoteLog.create voter_hash: voter_hash,
-         site_id: 1,
+         site_id: site_id,
          vote_id: self.id,
          vote: nvote
       if nvote != -1

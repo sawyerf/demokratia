@@ -14,9 +14,9 @@ class VotesController < ApplicationController
         site_id: 1,
         real_id: @vote.id,
         voter_count: 0
-	  Choice.create vote_id: @vote.id, text: "white", vote_count: 0, site_id: 1
-	  Choice.create vote_id: @vote.id, text: "yes", vote_count: 0, site_id: 1
-	  Choice.create vote_id: @vote.id, text: "no", vote_count: 0, site_id: 1
+	  Choice.create vote_id: @vote.id, text: "white", vote_count: 0, site_id: 1, index: 1
+	  Choice.create vote_id: @vote.id, text: "yes", vote_count: 0, site_id: 1, index: 2
+	  Choice.create vote_id: @vote.id, text: "no", vote_count: 0, site_id: 1, index: 3
       redirect_to "/"
     else
       flash[:fail] = "Your not connect"
@@ -43,7 +43,7 @@ class VotesController < ApplicationController
     elsif votelog and votelog.vote == nvote
       nvote = -1
     end
-    vote.vote(nvote, @current_user.voter_hash)
+    vote.vote(nvote, @current_user.voter_hash, 1)
   end
 
   def sendvote_inbox(site_id, votelog, nvote)
@@ -75,21 +75,7 @@ class VotesController < ApplicationController
     if not response
       return 
     elsif response.code == "200"
-      items = JSON.parse(response.body)
-      flash[:success] = items["items"]
-      items["items"].each do |item|
-        if item["type"] == "vote"
-          choices = Choice.where(vote_id: vote.id)
-          vote.update voter_count: item["voter_count"], status: item["status"], winner: item["winner"]
-          i = 0
-          item["choices"].each do |vote_count|
-            choices[i].update vote_count: vote_count
-            i = i + 1
-          end
-        elsif item["type"] == "votelog"
-          votelog.update vote: item["vote"]
-        end
-      end
+      Instance::JsonToDb.new.parse_post(response.body, vote, votelog)
     else
       flash[:fail] = "Fail code: `" + response.code + "`"
     end

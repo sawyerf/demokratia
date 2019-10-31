@@ -41,7 +41,7 @@ class OutboxController < ApplicationController
       filter_uploaded(@votes, @votelogs, @choices, filter)
     end
     convert_json(@votes, json)
-    convert_json(@votelogs, json)
+    # convert_json(@votelogs, json)
     convert_json(@choices, json)
     return json.to_json
   end
