@@ -1,5 +1,4 @@
 class OutboxController < ApplicationController
-  
   def filter_uploaded(votes, votelogs, choices, filter)
     filup = Time.at(filter["updated"].to_i).to_datetime
     if @votes; @votes = @votes.where(updated: filup..Time.current) end
@@ -21,11 +20,10 @@ class OutboxController < ApplicationController
   end
 
   def convert_json(tables, json)
-    if !tables
-      return
-    end
-    tables.each do |table|
-      json[:items].push(table.outbox_json)
+    if tables
+      tables.each do |table|
+        json[:items].push(table.outbox_json)
+      end
     end
   end
 

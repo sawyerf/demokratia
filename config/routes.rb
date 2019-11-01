@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   post 'votes/:id', to: 'votes#vote'
 
   get '', to: 'votes#index'
-  post '', to: 'votes#create'
+
+  post 'createvote', to: 'votes#postcreatevote'
+  get 'createvote', to: 'votes#createvote'
 
   get 'register', to: 'users#register'
   post 'register', to: 'users#create'

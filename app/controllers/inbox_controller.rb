@@ -1,8 +1,7 @@
 class InboxController < ApplicationController
- skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
 
   def vote(item, site_id)
-    puts("vache: ", site_id)
     vote = Vote.find(item[:vote_id])
     if vote.choice_count <= item[:vote] or item[:vote] < -1 
       head 406

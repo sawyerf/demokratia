@@ -1,0 +1,32 @@
+<div class="box dm-form">
+	<div class="content is-little">
+		<h1 class="dm-form-h1"> Register </h1>
+	</div>
+	<%= form_tag "/createvote", method: :post do %>
+		<div class="field">
+			<label class="label">Quest</label>
+			<input class="input" type="text" name="quest" placeholder="Quest">
+		</div>
+		<div class="field">
+		  <label class="label">Message</label>
+		  <div class="control">
+		    <textarea class="textarea" type="text" name="desc" placeholder="Description"></textarea>
+		  </div>
+		</div>
+		<div class="field">
+			<label class="label">Choices</label>
+		</div>
+		<div class="field">
+			<input class="input" type="text" name="choice[]" placeholder="Choice">
+		</div>
+		<div class="field">
+			<input class="input" type="text" name="choice[]" placeholder="Choice">
+		</div>
+		<div class="field">
+			<input class="input" type="text" name="choice[]" placeholder="Choice">
+		</div>
+		<div class="field">
+			<button class="button is-success is-fullwidth" type="submit"> Register </button>
+		</div>
+	<% end %>
+</div>

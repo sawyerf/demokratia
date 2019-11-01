@@ -79,12 +79,10 @@ class Vote < ActiveRecord::Base
       end
       votelog.update vote: nvote
     else
-      puts("poney:", site_id)
       votelog = VoteLog.create voter_hash: voter_hash,
          site_id: site_id,
          vote_id: self.id,
          vote: nvote
-      puts votelog.site_id
       if nvote != -1
         self.update voter_count: self.voter_count + 1
         choices[nvote].update vote_count: choices[nvote].vote_count + 1

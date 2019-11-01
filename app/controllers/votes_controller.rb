@@ -4,23 +4,30 @@ class VotesController < ApplicationController
   def index
 	  @votes = Vote.all
   end
-  def create
+
+  def postcreatevote
     if not @current_user
       flash[:fail] = "Your not connect"
       redirect_to "/"
       return 
     end
 	  @vote = Vote.create
-    @vote.update quest: params[:vote],
-        description: "yes ma men",
+    @vote.update quest: params[:quest],
+        description: params[:desc],
         published: Time.now,
-        choice_count: 3,
+        choice_count: 1, 
         site_id: 1,
         real_id: @vote.id,
         voter_count: 0
 	  Choice.create vote_id: @vote.id, text: "white", vote_count: 0, site_id: 1, index: 1
-	  Choice.create vote_id: @vote.id, text: "yes", vote_count: 0, site_id: 1, index: 2
-	  Choice.create vote_id: @vote.id, text: "no", vote_count: 0, site_id: 1, index: 3
+    i = 2
+    params[:choice].each do |chc|
+      if chc != ""
+        Choice.create vote_id: @vote.id, text: chc, vote_count: 0, site_id: 1, index: i
+        i = i + 1
+      end
+    end
+    @vote.update choice_count: i + 1
     redirect_to "/"
   end
 
@@ -78,5 +85,9 @@ class VotesController < ApplicationController
       self.votelocal(vote)
     end
     redirect_to "/votes/#{params[:id]}"
+  end
+
+  def createvote
+    nil
   end
 end
