@@ -1,25 +1,22 @@
-<a href="/createvote">Create vote</a>
 <div class="content">
-	<table>
+	<table class="table">
 		<thead>
 			<tr>
-				<th>Id</th>
-				<th>Voter</th>
-				<th>Site</th>
+				<th style="width: 1em;">Vote</th>
+				<th class="dm-mobile-table" style="width: 0;">Site</th>
 				<th>Quest</th>
-				<th>Updated</th>
-				<th>Status</th>
+				<th style="width: 8em;">Updated</th>
+				<th class="dm-mobile-table" style="width: 9em;">Status</th>
 			</tr>
 		</thead>
 		<tbody>
 			<% @votes.each do |vote| %>
-				<tr>
-					<th><%= vote.id %> </th>
+				<tr onclick="window.location='/votes/<%= vote.id %>'">
 					<td><%= vote.voter_count %> </td>
-					<td><%= Site.find(vote.site_id).domain %></td>
-					<td><a href="/votes/<%= vote.id %>"> <%= vote.quest %> </a></td>
+					<td class="dm-mobile-table"><%= Site.find(vote.site_id).domain %></td>
+					<td><%= vote.quest %> </td>
 					<td> <%= convert_time(vote.updated) %> </td>
-					<td> <% if vote.isend? %> End <% else %> In progress <% end %> </tr>
+					<td class="dm-mobile-table"> <% if vote.isend? %> End <% else %> In progress <% end %> </td>
 				</tr>
 			<% end %>
 		</tbody>
