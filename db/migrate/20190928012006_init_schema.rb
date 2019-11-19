@@ -11,8 +11,8 @@ class InitSchema < ActiveRecord::Migration[6.0]
       t.datetime :published
       t.integer :status, default: 0
       t.string :winner, default: nil
-      t.integer :voter_count
-      t.integer :choice_count
+      t.integer :voter_count, default: 0
+      t.integer :choice_count, default: 0
       # Instance
       t.integer :site_id, default: 1
       t.integer :real_id

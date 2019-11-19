@@ -16,7 +16,7 @@
 					<td class="dm-mobile-table"><%= Site.find(vote.site_id).domain %></td>
 					<td><%= vote.quest %> </td>
 					<td> <%= convert_time(vote.updated) %> </td>
-					<td class="dm-mobile-table"> <% if vote.isend? %> End <% else %> In progress <% end %> </td>
+					<td class="dm-mobile-table"> <% if vote.isend? %> <span class="tag is-danger is-light">End</span> <% else %> <span class="tag is-success is-light">Current</span><% end %> </td>
 				</tr>
 			<% end %>
 		</tbody>

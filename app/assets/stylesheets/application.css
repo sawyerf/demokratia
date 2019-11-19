@@ -21,7 +21,7 @@
 .dm-alert {
 	margin: 0.5em;
 	position: absolute;
-	left: -1px;
+	right: 1px;
 }
 
 .dm-form {
@@ -87,4 +87,9 @@ tbody tr:hover {
 
 .dm-form-h1 {
 	text-align: center;
+}
+
+text 
+{
+	white-space: pre-line;
 }

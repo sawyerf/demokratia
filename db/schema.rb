@@ -52,8 +52,8 @@ ActiveRecord::Schema.define(version: 2019_09_28_012006) do
     t.datetime "published"
     t.integer "status", default: 0
     t.string "winner"
-    t.integer "voter_count"
-    t.integer "choice_count"
+    t.integer "voter_count", default: 0
+    t.integer "choice_count", default: 0
     t.integer "site_id", default: 1
     t.integer "real_id"
     t.datetime "updated"
